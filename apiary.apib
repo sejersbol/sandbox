@@ -1,0 +1,631 @@
+FORMAT: 1A
+
+# Social API
+The Social API is a REST API with JSON payloads for an *anonymous location based social network*.
+
+# Social API Root [/]
+Social API entry point.
+
+This resource does not have any attributes. Instead it offers the initial API affordances in the form of the HTTP Link header and HAL links
+
+## Retrieve Entry Point [GET]
++ Response 200 (application/hal+json)
+    + Headers
+
+            Link: <http:/api.gistfox.com/>;rel="self",<http:/api.gistfox.com/gists>;rel="gists"
+
+    + Body
+
+            {
+                "_links": {
+                    "self": { "href": "/" },
+                    "gists": { "href": "/gists?{since}", "templated": true }
+                }
+            }
+
+# Group Users
+User related resources of the **Social API**
+
+## User [/users]
+
+### Create a User [POST]
++ Request (application/json)
+    + Body
+    
+            {
+                "alias": "sejersbol",
+                "password": "xswedc"
+            }
+
++ Response 201 (application/json)
+    + Header
+    
+            Location: https://api.social.tla/1/users/0BBAC7F3-4B87-4A20-A5F5-05A8C7FE73CF
+
+    + Body
+
+            {
+                "userId": "0BBAC7F3-4B87-4A20-A5F5-05A8C7FE73CF",
+                "createdAt": "2015-04-23T18:25:43.511Z"
+                "sessionToken": "285A2911-C42E-4650-8D44-2356B11AD806"
+            }
+
+## Operations on a User [/users/{id}]
+A user with all his/her properties.
+
+### Retrieve a User [GET]
+Users can only retrieve their own user (checked by adding the session token in the header).
+
++ Request
+    + Header
+    
+            X-Social-API-Session-Token: 285A2911-C42E-4650-8D44-2356B11AD806
+
++ Response 200 (application/json)
+    + Body
+
+            {
+                "alias": "sejersbol",
+                "createdAt": "2015-04-23T18:25:43.511Z",
+                "updatedAt": "2015-04-23T18:25:43.511Z",
+                "userId": "0BBAC7F3-4B87-4A20-A5F5-05A8C7FE73CF"
+            }
+
+### Update a User [PUT]
+Users can only update their own user (checked by adding the session token in the header).
+
++ Request (application/json)
+    + Header
+    
+            X-Social-API-Session-Token: 285A2911-C42E-4650-8D44-2356B11AD806
+
+    + Body
+    
+            {
+                "alias": "coolbuddy"
+            }
+ 
++ Response 200 (application/json)
+    + Body
+    
+            {
+                "updatedAt": "2015-05-24T18:25:43.511Z"
+            }
+
+### Delete a User [DELETE]
+Users can only delete their own user (checked by adding the session token in the header).
+
++ Request
+    + Header
+    
+            X-Social-API-Session-Token: 285A2911-C42E-4650-8D44-2356B11AD806
+
++ Response 204
+
+## User Wallet [/users/{id}/wallet]
+The user wallet is where the user keeps his/her in-app coins.
+
+### Add coins to the Users Wallet [PUT]
++ Request (application/json)
+    + Header
+    
+            X-Social-API-Session-Token: 285A2911-C42E-4650-8D44-2356B11AD806
+
+    + Body
+    
+            {
+                "coins": 100
+            }
+
++ Response 200
+    + Body
+
+            {
+                "balance": 110
+            }
+
+### Retrieve balance of the User Wallet [GET]
++ Request
+    + Header
+    
+            X-Social-API-Session-Token: 285A2911-C42E-4650-8D44-2356B11AD806
+
++ Response 200
+    + Body
+
+            {
+                "balance": 110
+            }
+
+## User Buddies [/users/{id}/buddies]
+
+### Add a Buddy [POST]
++ Request (application/json)
+    + Header
+    
+            X-Social-API-Session-Token: 285A2911-C42E-4650-8D44-2356B11AD806
+    
+    + Body
+    
+            {
+                "alias": "sejersbol",
+                "buddyKey": "QKy1AIAaAQH8Zc4AEEQVf0AAAACYkLk=="
+            }
+
++ Response 201 (application/json)
+    + Body
+
+            {
+                "createdAt": "2015-04-23T18:25:43.511Z"
+            }
+
++ Request Ignore (application/json)
+    + Header
+    
+            X-Social-API-Session-Token: 285A2911-C42E-4650-8D44-2356B11AD806
+    
+    + Body
+    
+            {
+                "alias": "stalker",
+                "ignore": true
+                "buddyKey": "LEy1GAKaAQH8Zc4AEEQVf0AAAACYkRl=="
+            }
+
++ Response 201 (application/json)
+    + Body
+
+            {
+                "createdAt": "2015-04-24T12:10:34.115Z"
+            }
+
+## Operations on User Buddies [/users/{id}/buddies/{alias}]
+
+### Retrieve a User Buddies [GET]
++ Request
+    + Header
+    
+            X-Social-API-Session-Token: 285A2911-C42E-4650-8D44-2356B11AD806
+
++ Response 200
+    + Body
+    
+            {
+                "buddyKey": "QKy1AIAaAQH8Zc4AEEQVf0AAAACYkLk=="
+            }
+
+### Delete a User Buddy [DELETE]
++ Request
+    + Header
+    
+            X-Social-API-Session-Token: 285A2911-C42E-4650-8D44-2356B11AD806
+
++ Response 204
+
+# Group Signin
+
+## Signin [/signin]
+
+### Signin to get a session token [GET]
++ Request (application/json)
+    + Body
+
+            {
+                "alias": "sejersbol",
+                "password": "xswedc"
+            }
+
++ Response 201 (application/json)
+    + Body
+
+            {
+                "alias": "sejersbol",
+                "userId": "0BBAC7F3-4B87-4A20-A5F5-05A8C7FE73CF",
+                "sessionToken": "285A2911-C42E-4650-8D44-2356B11AD806"
+            }
+
+# Group Drops
+
+## Drop [/drops]
+A drop is primary a text and image package that can be encrypted and placed at a location.
+
+### Create a Drop [POST]
++ Request Tail - anybody can pick it up (application/json)
+    + Header
+    
+            X-Social-API-Session-Token: 285A2911-C42E-4650-8D44-2356B11AD806
+
+    + Body
+    
+            {
+                "location": "u4pruydqqvj",
+                "pickupZone": 10,
+                "horizon": 7,
+                "lifespan": 5,
+                "beat": 3,
+                "destruct": 0,
+                "signature": "HYybwVYYJaDoMJc6wG1a8rIASpU1mWEP/lRvgPZkyQORSgisQ==",
+                "alias": "sejersbol",
+                "text": "Finders keepers",
+                "image": "VGhpcyBpcyBhIG5pY2UgaW1hZ2UgZHVtbXk="
+            }
+
++ Response 201 (application/json)
+    + Header
+    
+            Location: https://api.social.tla/1/drops/77AD2C7C-D23F-401A-AEA3-DFAB7629E6A3
+
+    + Body
+    
+            {
+                "createdAt": "2015-05-24T18:30:19.124Z",
+                "dropId": "77AD2C7C-D23F-401A-AEA3-DFAB7629E6A3"
+            }
+
++ Request Buddy - designated for a single other user (application/json)
+    + Header
+    
+            X-Social-API-Session-Token: 285A2911-C42E-4650-8D44-2356B11AD806
+
+    + Body
+    
+            {
+                "location": "u4pruydqqvj",
+                "pickupZone": 10,
+                "horizon": 7,
+                "lifespan": 5,
+                "beat": 3,
+                "destruct": 0,
+                "encrypted": "YYYbwVYYJaDoMJc6wG1a8rIASpU1mWEP/lRvgPZkyQORSgHej==",
+                "buddyKey": "PdfhAIAaAQH8Zc4AEEQVf0AAAACYkTk=="
+            }
+
++ Response 201 (application/json)
+    + Header
+    
+            Location: https://api.social.tla/1/drops/AA3AE4F2-B681-4AA8-946F-E7D9419A87F2
+
+    + Body
+    
+            {
+                "createdAt": "2015-05-24T18:30:19.124Z",
+                "dropId": "AA3AE4F2-B681-4AA8-946F-E7D9419A87F2"
+            }
+
+### Scan for Drops [GET]
++ Request (application/json)
+    + Header 
+
+            X-Social-API-Session-Token: 285A2911-C42E-4650-8D44-2356B11AD806
+
+    + Body
+    
+            {
+                "userLocation": "u4pruydgqka"
+            }
+
++ Response 200 (application/json)
+    + Body
+    
+            [
+                {
+                    "dropId": "77AD2C7C-D23F-401A-AEA3-DFAB7629E6A3",
+                    "location": "u4pruydqqvj"
+                }, {
+                    "dropId": "75774800-ADFF-41FE-91AD-EE7D42164A02",
+                    "location": "u4pruydqqvk"
+                }, {
+                    "dropId": "E16FFFDF-1D08-48B8-A50F-8510B1E91AA7",
+                    "location": "u4pruydqqvg"
+                }
+            ]
+
+## Drops [/drops/{id}]
+
+### Retrieve a Drop [GET]
++ Request Tail (application/json)
+    + Header
+    
+            X-Social-API-Session-Token: 285A2911-C42E-4650-8D44-2356B11AD806
+
+    + Body
+    
+            {
+                "userLocation": "u4pruydgqka"
+            }
+
++ Response 200 (application/json)
+    + Body
+
+            {
+                "location": "u4pruydqqvj",
+                "pickupZone": 10,
+                "horizon": 7,
+                "lifespan": 5,
+                "beat": 3,
+                "destruct": 0,
+                "signature": "HYybwVYYJaDoMJc6wG1a8rIASpU1mWEP/lRvgPZkyQORSgisQ==",
+                "sendersKey": "QKy1AIAaAQH8Zc4AEEQVf0AAAACYkLk==",
+                "alias": "sejersbol",
+                "text": "Finders keepers",
+                "image": "VGhpcyBpcyBhIG5pY2UgaW1hZ2UgZHVtbXk=",
+                "createdAt": "2015-05-24T18:30:19.124Z",
+                "updatedAt": "2015-05-24T18:30:19.124Z",
+                "dropId": "77AD2C7C-D23F-401A-AEA3-DFAB7629E6A3"
+            }
+
++ Request Buddy (application/json)
+    + Header
+    
+            X-Social-API-Session-Token: 285A2911-C42E-4650-8D44-2356B11AD806
+
+    + Body
+    
+            {
+                "userLocation": "u4pruydgqka"
+            }
+
++ Response 200 (application/json)
+    + Body
+
+            {
+                "location": "u4pruydqqvj",
+                "pickupZone": 10,
+                "horizon": 7,
+                "lifespan": 5,
+                "beat": 3,
+                "destruct": 0,
+                "encrypted": "YYYbwVYYJaDoMJc6wG1a8rIASpU1mWEP/lRvgPZkyQORSgHej==",
+                "buddyKey": "PdfhAIAaAQH8Zc4AEEQVf0AAAACYkTk=="
+            }
+
+### Update a Drop [PUT]
++ Request (application/json)
+    + Header
+    
+            X-Social-API-Session-Token: 285A2911-C42E-4650-8D44-2356B11AD806
+
+    + Body
+    
+            {
+                "text": "A divorced mother of one",
+                "signature": "XXXbwVYYJaDoMJc6wG1a8rIASpU1mWEP/lRvgPZkyQORSgasH=="
+            }
+
++ Response 200 (application/json)
+    + Body
+    
+            {
+                "updatedAt": "2015-05-24T18:34:44.321Z"
+            }
+
+### Delete a Drop [DELETE]
++ Request
+    + Header
+    
+            X-Social-API-Session-Token: 285A2911-C42E-4650-8D44-2356B11AD806
+
++ Response 204
+
+## Drop Trends [/drops/{id}/trends]
+Other users response to the drop
+
+### Give upvote/downvote on a Drop [POST]
++ Request Upvote (application/json)
+    + Header
+    
+            X-Social-API-Session-Token: 285A2911-C42E-4650-8D44-2356B11AD806   
+
+    + Body
+    
+            {
+                "vote": "up"
+            }
+
++ Response 201 (application/json)
+    + Body
+
+            {
+                "voteCount": 42
+            }
+
++ Request Downvote (application/json)
+    + Header
+    
+            X-Social-API-Session-Token: 285A2911-C42E-4650-8D44-2356B11AD806   
+
+    + Body
+    
+            {
+                "vote": "down"
+            }
+
++ Response 201 (application/json)
+    + Body
+
+            {
+                "voteCount": -10
+            }
+
+### Trending Drops [GET]
+Many and quickly increasing upvotes within a specified region.
+
++ Request (application/json)
+    + Body
+    
+            {
+                "region": "u4pruyd"
+            }
+
++ Response 200 (application/json)
+    + Body
+
+            [
+                {
+                    "dropId": "75774800-ADFF-41FE-91AD-EE7D42164A02",
+                    "location": "u4pruydqqvk"
+                }, {
+                    "dropId": "E16FFFDF-1D08-48B8-A50F-8510B1E91AA7",
+                    "location": "u4pruydqqvg"
+                }
+            ]
+
+# Group Messages
+
+## Messages [/messages]
+Send messages direct to other users.
+
+### Create Message [POST]
++ Request Buddy - single recipient, encrypted (application/json)
+    + Header
+    
+            X-Social-API-Session-Token: 285A2911-C42E-4650-8D44-2356B11AD806
+
+    + Body
+    
+            {
+                "buddyKey": "QKy1AIAaAQH8Zc4AEEQVf0AAAACYkLk==",
+                "encrypted": "VGhpcyBpcyBhIHZlcnkgc2VjcmV0IHRlc3Q="
+            }
+
++ Response 201 (application/json)
+    + Header
+    
+            Location: https://api.social.tla/1/messages/B2F99855-D323-4C91-9528-E3AA113B1855
+
+    + Body
+    
+            {
+                "sentAt": "2015-05-27T10:45:20.584Z",
+                "messageId": "B2F99855-D323-4C91-9528-E3AA113B1855"
+            }
+
++ Request Tail - for all who have discovered the senders key, not encrypted (application/json)
+    + Header
+    
+            X-Social-API-Session-Token: 285A2911-C42E-4650-8D44-2356B11AD806
+
+    + Body
+    
+            {
+                "alias": "sejersbol",
+                "text": "This is not encrypted",
+                "image": "VGhpcyBpcyBhIG5pY2UgaW1hZ2UgZHVtbXk=",
+                "signature": "PDybwVYYJaDoMJc6wG1a8rIASpU1mWEP/lRvgPZkyQORSgiKl=="
+            }
+
++ Response 201 (application/json)
+    + Header
+    
+            Location: https://api.social.tla/1/messages/812B17BF-F9F3-41BC-A248-E3C9C5E52A0F
+
+    + Body
+    
+            {
+                "sentAt": "2015-05-27T10:45:20.584Z",
+                "messageId": "812B17BF-F9F3-41BC-A248-E3C9C5E52A0F"
+            }
+
+### Retrieve Messages [GET]
++ Request
+    + Header
+    
+            X-Social-API-Session-Token: 285A2911-C42E-4650-8D44-2356B11AD806
+
++ Response 200 (application/json)
+    + Body
+
+            [
+                {
+                    "encrypted": "VGhpcyBpcyBhIHZlcnkgc2VjcmV0IHRlc3Q=",
+                    "sentAt": "2015-05-27T10:45:20.584Z",
+                    "messageId": "B2F99855-D323-4C91-9528-E3AA113B1855"
+                }, {
+                    "alias": "sejersbol",
+                    "text": "This is not encrypted",
+                    "image": "VGhpcyBpcyBhIG5pY2UgaW1hZ2UgZHVtbXk=",
+                    "signature": "PDybwVYYJaDoMJc6wG1a8rIASpU1mWEP/lRvgPZkyQORSgiKl==",
+                    "sentAt": "2015-05-27T10:45:20.584Z",
+                    "messageId": "812B17BF-F9F3-41BC-A248-E3C9C5E52A0F"
+                }
+            ]
+
+## Operations on Messages [/messages/{messageId}]
+
+### Retrieve a Message [GET]
++ Request Buddy - single recipient, encrypted
+    + Header
+    
+            X-Social-API-Session-Token: 285A2911-C42E-4650-8D44-2356B11AD806
+
++ Response 200 (application/json)
+    + Body
+    
+            {
+                "sentAt": "2015-05-27T10:45:20.584Z",
+                "encrypted": "VGhpcyBpcyBhIHZlcnkgc2VjcmV0IHRlc3Q="
+            }
+
++ Request Tail - can be read by other users, verified by user who have the senders key
+    + Header
+    
+            X-Social-API-Session-Token: 285A2911-C42E-4650-8D44-2356B11AD806
+
++ Response 200 (application/json)
+    + Body
+    
+            {
+                "sentAt": "2015-05-27T10:45:20.584Z",
+                "alias": "sejersbol",
+                "text": "This is not encrypted",
+                "image": "VGhpcyBpcyBhIG5pY2UgaW1hZ2UgZHVtbXk=",
+                "signature": "PDybwVYYJaDoMJc6wG1a8rIASpU1mWEP/lRvgPZkyQORSgiKl=="
+            }
+
+### Delete a Message [DELETE]
++ Request
+    + Header
+    
+            X-Social-API-Session-Token: 285A2911-C42E-4650-8D44-2356B11AD806
+
++ Response 204
+
+## Message Feedback [/messages/{id}/feedback]
+Other users response to the message
+
+### Give Feedback on a Drop [POST]
++ Request Upvote (application/json)
+    + Header
+    
+            X-Social-API-Session-Token: 285A2911-C42E-4650-8D44-2356B11AD806   
+
+    + Body
+    
+            {
+                "vote": "up"
+            }
+
++ Response 201 (application/json)
+    + Body
+
+            {
+                "voteCount": 42
+            }
+
++ Request Downvote (application/json)
+    + Header
+    
+            X-Social-API-Session-Token: 285A2911-C42E-4650-8D44-2356B11AD806   
+
+    + Body
+    
+            {
+                "vote": "down"
+            }
+
++ Response 201 (application/json)
+    + Body
+
+            {
+                "voteCount": -10
+            }
