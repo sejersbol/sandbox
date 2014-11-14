@@ -108,7 +108,7 @@ The alias is just for convenience, and a user can potentially have many aliases.
     + Body
 
             {
-                "userId": "0BBAC7F3-4B87-4A20-A5F5-05A8C7FE73CF",
+                "id": "0BBAC7F3-4B87-4A20-A5F5-05A8C7FE73CF",
                 "createdAt": "2015-04-23T18:25:43.511Z"
             }
 
@@ -265,26 +265,27 @@ When the user picks up a key from another user (we call this for a *buddy key*) 
             }
 
 # Group Signin
+Signin related resources of the **Social API**.
 
 ## Signin [/signin]
+Use this resource to Signin to the API and retrieve a new session key.
+
+The Signin resource does not have any attributes.
 
 ### Signin to get a session token [GET]
 + Request (application/json)
     + Body
 
             {
-                "alias": "sejersbol",
-                "password": "xswedc"
+                "alias": "cooldude",
+                "key": "QKy1AIAaAQH8Zc4AEEQVf0AAAACYkLk=="
             }
 
-+ Response 201 (application/json)
-    + Body
++ Response 204 (application/json)
+    + Header:
 
-            {
-                "alias": "sejersbol",
-                "userId": "0BBAC7F3-4B87-4A20-A5F5-05A8C7FE73CF",
-                "sessionToken": "285A2911-C42E-4650-8D44-2356B11AD806"
-            }
+            X-Social-API-Session-Token: 285A2911-C42E-4650-8D44-2356B11AD806
+
 
 # Group Drops
 
