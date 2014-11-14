@@ -3,10 +3,20 @@ FORMAT: 1A
 # Social API
 The Social API is a REST API with JSON payloads for an *anonymous location based social network*.
 
+## Authentication
+Currently the Gist Fox API does not provide authenticated access.
+
+## Media Types
+Where applicable this API uses the [JSON](http://en.wikipedia.org/wiki/JSON) media-type to represent resources states.
+
+
+## Error States
+The common [HTTP Response Status Codes](https://github.com/for-GET/know-your-http-well/blob/master/status-codes.md) are used.
+
 # Social API Root [/]
 Social API entry point.
 
-This resource does not have any attributes. Instead it offers the initial API affordances in the form of the HTTP Link header and HAL links
+This resource does not have any attributes.
 
 ## Retrieve Entry Point [GET]
 + Response 200 (application/hal+json)
