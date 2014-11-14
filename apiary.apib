@@ -85,13 +85,10 @@ Users can only delete their own user (checked by adding the session token in the
 ## User [/users]
 
 ### Create a User [POST]
-+ Request (application/json)
-    + Body
-    
-            {
-                "alias": "sejersbol",
-                "password": "xswedc"
-            }
++ Request
+    + Headers
+
+            Authorization: Basic c2VqZXJzYm9sOnFhenhzdw==
 
 + Response 201 (application/json)
     + Header
@@ -104,6 +101,7 @@ Users can only delete their own user (checked by adding the session token in the
                 "userId": "0BBAC7F3-4B87-4A20-A5F5-05A8C7FE73CF",
                 "createdAt": "2015-04-23T18:25:43.511Z"
                 "sessionToken": "285A2911-C42E-4650-8D44-2356B11AD806"
+                "aliases": [{"alias": "sejersbol"}]
             }
 
 ## User Wallet [/users/{id}/wallet]
