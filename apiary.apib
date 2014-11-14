@@ -82,11 +82,14 @@ Users can only delete their own user (checked by adding the session token in the
 
 + Response 204
 
-## User [/users]
+## Users [/users]
 Use this endpoint to add new users of the API.
 
 ### Create a User [POST]
-The user sends his/her public key and alias 
+The user sends his/her public **key** and **alias** to the service. The public key is used to uniquely
+identify the user and all check of user signature when needed.
+
+The alias is just for convenience, and a user can potentially have many aliases.
 + Request (application/json)
     + Body
 
@@ -111,7 +114,15 @@ The user sends his/her public key and alias
             }
 
 ## User Wallet [/users/{id}/wallet]
-The user wallet is where the user keeps his/her in-app coins.
+The user Wallet is where the user keeps his/her in-app currency.
+
+The Wallet resource has the following attribute:
+
+- balance
+
++ Parameters
+
+    + id (string) ... ID of the User in the form of a [UUID](http://en.wikipedia.org/wiki/Universally_unique_identifier).
 
 ### Add coins to the Users Wallet [PUT]
 + Request (application/json)
@@ -122,7 +133,7 @@ The user wallet is where the user keeps his/her in-app coins.
     + Body
     
             {
-                "coins": 100
+                "deposit": 100
             }
 
 + Response 200
@@ -145,9 +156,50 @@ The user wallet is where the user keeps his/her in-app coins.
                 "balance": 110
             }
 
+## User Buddy [/users/{id}/buddies/{alias}]
+A User Buddy object. The User Buddy resource reprecents a persons buddies.
+
+(TODO - Remove this note: The internal data structure will also hold the users public key,
+but this will not be available over the API.)
+
+The User resource has the following attributes:
+
+- id
+- createdAt
+- updatedAt
+- aliases
+
+The states *id*, *createdAt*, and *updatedAt* are assigned by the Social API. 
+
++ Parameters
+    + id (string) ... ID of the User in the form of a [UUID](http://en.wikipedia.org/wiki/Universally_unique_identifier).
+
+### Retrieve a User Buddies [GET]
++ Request
+    + Header
+    
+            X-Social-API-Session-Token: 285A2911-C42E-4650-8D44-2356B11AD806
+
++ Response 200
+    + Body
+    
+            {
+                "buddyKey": "QKy1AIAaAQH8Zc4AEEQVf0AAAACYkLk=="
+            }
+
+### Delete a User Buddy [DELETE]
++ Request
+    + Header
+    
+            X-Social-API-Session-Token: 285A2911-C42E-4650-8D44-2356B11AD806
+
++ Response 204
+
 ## User Buddies [/users/{id}/buddies]
+When the user picks up a key from another user (we call this for a *buddy key*) it should be placed here.
 
 ### Add a Buddy [POST]
+
 + Request (application/json)
     + Header
     
@@ -186,29 +238,6 @@ The user wallet is where the user keeps his/her in-app coins.
             {
                 "createdAt": "2015-04-24T12:10:34.115Z"
             }
-
-## Operations on User Buddies [/users/{id}/buddies/{alias}]
-
-### Retrieve a User Buddies [GET]
-+ Request
-    + Header
-    
-            X-Social-API-Session-Token: 285A2911-C42E-4650-8D44-2356B11AD806
-
-+ Response 200
-    + Body
-    
-            {
-                "buddyKey": "QKy1AIAaAQH8Zc4AEEQVf0AAAACYkLk=="
-            }
-
-### Delete a User Buddy [DELETE]
-+ Request
-    + Header
-    
-            X-Social-API-Session-Token: 285A2911-C42E-4650-8D44-2356B11AD806
-
-+ Response 204
 
 # Group Signin
 
