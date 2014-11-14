@@ -83,8 +83,10 @@ Users can only delete their own user (checked by adding the session token in the
 + Response 204
 
 ## User [/users]
+Use this endpoint to add new users of the API.
 
 ### Create a User [POST]
+The user sends his/her alias and 
 + Request
     + Headers
 
@@ -94,13 +96,14 @@ Users can only delete their own user (checked by adding the session token in the
     + Header
     
             Location: https://api.social.tla/1/users/0BBAC7F3-4B87-4A20-A5F5-05A8C7FE73CF
+            X-Social-API-Session-Token: 285A2911-C42E-4650-8D44-2356B11AD806
 
     + Body
 
             {
                 "userId": "0BBAC7F3-4B87-4A20-A5F5-05A8C7FE73CF",
-                "createdAt": "2015-04-23T18:25:43.511Z"
-                "sessionToken": "285A2911-C42E-4650-8D44-2356B11AD806"
+                "createdAt": "2015-04-23T18:25:43.511Z",
+                "updatedAt": "2015-04-23T18:25:43.511Z",
                 "aliases": [{"alias": "sejersbol"}]
             }
 
