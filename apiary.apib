@@ -33,26 +33,22 @@ The states *id*, *createdAt*, and *updatedAt* are assigned by the Social API.
 + Parameters
     + id (string) ... ID of the User in the form of a [UUID](http://en.wikipedia.org/wiki/Universally_unique_identifier).
 
-+ Model (application/json)
-JSON representation of Gist Resource.
+### Retrieve a User [GET]
+Users can only retrieve their own user (checked by adding the session token in the header).
 
-    + Headers
++ Request
+    + Header
     
             X-Social-API-Session-Token: 285A2911-C42E-4650-8D44-2356B11AD806
 
-    + Body
-
++ Response 200 (application/json)
+     + Body
             {
                 "id": "0BBAC7F3-4B87-4A20-A5F5-05A8C7FE73CF",
                 "createdAt": "2015-04-23T18:25:43.511Z",
                 "updatedAt": "2015-04-23T18:25:43.511Z",
                 "aliases": [{"alias": "sejersbol"}, {"alias": "coolbuddy"}]
             }
-
-### Retrieve a User [GET]
-Users can only retrieve their own user (checked by adding the session token in the header).
-+ Response 200 (application/json)
-    [User][]
 
 ### Update a User [PUT]
 Users can only update their own user (checked by adding the session token in the header).
