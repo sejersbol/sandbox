@@ -12,14 +12,13 @@ This resource does not have any attributes. Instead it offers the initial API af
 + Response 200 (application/hal+json)
     + Headers
 
-            Link: <http:/api.gistfox.com/>;rel="self",<http:/api.gistfox.com/gists>;rel="gists"
+            Link: <http:/api.social.tla/>;rel="self"
 
     + Body
 
             {
                 "_links": {
                     "self": { "href": "/" },
-                    "gists": { "href": "/gists?{since}", "templated": true }
                 }
             }
 
