@@ -13,7 +13,7 @@ The common [HTTP Response Status Codes](https://github.com/for-GET/know-your-htt
 User related resources of the **Social API**
 
 ## User [/users/{id}]
-A User object. The User resource reprecents a person that is using the Social API, i.e. the perons aliases.
+A User object. The User resource represents a person that is using the Social API, i.e. the perons aliases.
 
 (TODO - Remove this note: The internal data structure will also hold the users public key,
 but this will not be available over the API.)
@@ -80,7 +80,7 @@ Users can only delete their own user (checked by adding the session token in the
 + Response 204
 
 ## Users [/users]
-Use this endpoint to add new users of the API.
+Use this endpoint to add new Users of the API.
 
 ### Create a User [POST]
 The user sends his/her public **key** and **alias** to the service. The public key is used to uniquely
@@ -120,6 +120,8 @@ The Wallet resource has the following attribute:
     + id (string) ... ID of the User in the form of a [UUID](http://en.wikipedia.org/wiki/Universally_unique_identifier).
 
 ### Add coins to the Users Wallet [PUT]
+After the user has made an in-app purchase the bought currency can be
+added to the User Wallet.
 + Request (application/json)
     + Header
     
@@ -152,7 +154,7 @@ The Wallet resource has the following attribute:
             }
 
 ## User Buddy [/users/{id}/buddies/{alias}]
-A User Buddy object. The User Buddy resource reprecents a persons buddies.
+A User Buddy object. The User Buddy resource represents a persons buddies.
 
 The User Buddy resource has the following attributes:
 
@@ -169,6 +171,7 @@ The states *createdAt*, and *updatedAt* are assigned by the Social API.
     + alias (string) ... One of the aliases the user is known under.
 
 ### Retrieve a User Buddy [GET]
+The list of aliases are searched to find the requested buddy.
 + Request
     + Header
     
@@ -186,6 +189,7 @@ The states *createdAt*, and *updatedAt* are assigned by the Social API.
             }
 
 ### Update a User Buddy [PATCH]
+This would primarly be used to ignore a buddy or add an alias to the buddy.
 + Request
     + Header
     
@@ -209,6 +213,7 @@ The states *createdAt*, and *updatedAt* are assigned by the Social API.
             }
 
 ### Delete a User Buddy [DELETE]
+This is not the same as ignoring a buddy.
 + Request
     + Header
     
@@ -239,26 +244,6 @@ When the user picks up a key from another user (we call this for a *buddy key*) 
                 "createdAt": "2015-04-23T18:25:43.511Z"
             }
 
-+ Request - ignore a User Buddy (application/json)
-    + Header
-    
-            X-Social-API-Session-Token: 285A2911-C42E-4650-8D44-2356B11AD806
-    
-    + Body
-    
-            {
-                "alias": "stalker",
-                "key": "LEy1GAKaAQH8Zc4AEEQVf0AAAACYkRl==",
-                "ignore": true
-            }
-
-+ Response 201 (application/json)
-    + Body
-
-            {
-                "createdAt": "2015-04-24T12:10:34.115Z"
-            }
-
 # Group Signin
 Signin related resources of the **Social API**.
 
@@ -281,104 +266,40 @@ The Signin resource does not have any attributes.
             X-Social-API-Session-Token: 77BF2828-B27B-4F67-B8A1-85FA54F9BFE7
 
 # Group Drops
+Drop related resources of the **Social API**
 
-## Drop [/drops]
-A drop is primary a text and image package that can be encrypted and placed at a location.
+## Drop [/drops/{id}]
+A Drop object. The Drop resource represents a location based message that can
+contain a **text** and a **photo** together with several *configuration parameters*.
 
-### Create a Drop [POST]
-+ Request Tail - anybody can pick it up (application/json)
-    + Header
-    
-            X-Social-API-Session-Token: 285A2911-C42E-4650-8D44-2356B11AD806
+TODO: Describe/define *buddy drops* and *tail drops*!
 
-    + Body
-    
-            {
-                "location": "u4pruydqqvj",
-                "pickupZone": 10,
-                "horizon": 7,
-                "lifespan": 5,
-                "beat": 3,
-                "destruct": 0,
-                "signature": "HYybwVYYJaDoMJc6wG1a8rIASpU1mWEP/lRvgPZkyQORSgisQ==",
-                "alias": "sejersbol",
-                "text": "Finders keepers",
-                "image": "VGhpcyBpcyBhIG5pY2UgaW1hZ2UgZHVtbXk="
-            }
+The Drop resource has the following attributes:
 
-+ Response 201 (application/json)
-    + Header
-    
-            Location: https://api.social.tla/1/drops/77AD2C7C-D23F-401A-AEA3-DFAB7629E6A3
+- id
+- createdAt
+- updatedAt
+- location
+- pickupZone
+- horizon
+- lifespan
+- beat
+- destruct
+- signature
+- key
+- alias
+- text
+- photo
+- encrypted
 
-    + Body
-    
-            {
-                "createdAt": "2015-05-24T18:30:19.124Z",
-                "dropId": "77AD2C7C-D23F-401A-AEA3-DFAB7629E6A3"
-            }
+The states *id*, *createdAt*, and *updatedAt* are assigned by the Social API. 
 
-+ Request Buddy - designated for a single other user (application/json)
-    + Header
-    
-            X-Social-API-Session-Token: 285A2911-C42E-4650-8D44-2356B11AD806
-
-    + Body
-    
-            {
-                "location": "u4pruydqqvj",
-                "pickupZone": 10,
-                "horizon": 7,
-                "lifespan": 5,
-                "beat": 3,
-                "destruct": 0,
-                "encrypted": "YYYbwVYYJaDoMJc6wG1a8rIASpU1mWEP/lRvgPZkyQORSgHej==",
-                "buddyKey": "PdfhAIAaAQH8Zc4AEEQVf0AAAACYkTk=="
-            }
-
-+ Response 201 (application/json)
-    + Header
-    
-            Location: https://api.social.tla/1/drops/AA3AE4F2-B681-4AA8-946F-E7D9419A87F2
-
-    + Body
-    
-            {
-                "createdAt": "2015-05-24T18:30:19.124Z",
-                "dropId": "AA3AE4F2-B681-4AA8-946F-E7D9419A87F2"
-            }
-
-### Scan for Drops [GET]
-+ Request (application/json)
-    + Header 
-
-            X-Social-API-Session-Token: 285A2911-C42E-4650-8D44-2356B11AD806
-
-    + Body
-    
-            {
-                "userLocation": "u4pruydgqka"
-            }
-
-+ Response 200 (application/json)
-    + Body
-    
-            [
-                {
-                    "dropId": "77AD2C7C-D23F-401A-AEA3-DFAB7629E6A3",
-                    "location": "u4pruydqqvj"
-                }, {
-                    "dropId": "75774800-ADFF-41FE-91AD-EE7D42164A02",
-                    "location": "u4pruydqqvk"
-                }, {
-                    "dropId": "E16FFFDF-1D08-48B8-A50F-8510B1E91AA7",
-                    "location": "u4pruydqqvg"
-                }
-            ]
-
-## Drops [/drops/{id}]
++ Parameters
+    + id (string) ... ID of the User in the form of a [UUID](http://en.wikipedia.org/wiki/Universally_unique_identifier).
 
 ### Retrieve a Drop [GET]
+A Drop can only be retrieved if the user is inside the pickup zone, thus the
+user location must be submitted in the request.
 + Request Tail (application/json)
     + Header
     
@@ -401,13 +322,13 @@ A drop is primary a text and image package that can be encrypted and placed at a
                 "beat": 3,
                 "destruct": 0,
                 "signature": "HYybwVYYJaDoMJc6wG1a8rIASpU1mWEP/lRvgPZkyQORSgisQ==",
-                "sendersKey": "QKy1AIAaAQH8Zc4AEEQVf0AAAACYkLk==",
+                "key": "QKy1AIAaAQH8Zc4AEEQVf0AAAACYkLk==",
                 "alias": "sejersbol",
                 "text": "Finders keepers",
-                "image": "VGhpcyBpcyBhIG5pY2UgaW1hZ2UgZHVtbXk=",
+                "photo": "VGhpcyBpcyBhIG5pY2UgaW1hZ2UgZHVtbXk=",
                 "createdAt": "2015-05-24T18:30:19.124Z",
                 "updatedAt": "2015-05-24T18:30:19.124Z",
-                "dropId": "77AD2C7C-D23F-401A-AEA3-DFAB7629E6A3"
+                "id": "77AD2C7C-D23F-401A-AEA3-DFAB7629E6A3"
             }
 
 + Request Buddy (application/json)
@@ -432,10 +353,12 @@ A drop is primary a text and image package that can be encrypted and placed at a
                 "beat": 3,
                 "destruct": 0,
                 "encrypted": "YYYbwVYYJaDoMJc6wG1a8rIASpU1mWEP/lRvgPZkyQORSgHej==",
-                "buddyKey": "PdfhAIAaAQH8Zc4AEEQVf0AAAACYkTk=="
             }
 
-### Update a Drop [PUT]
+### Update a Drop [PATCH]
+The creator of a Drop can update it (e.g. change the text), but an update must
+always contain a new signature as the old signature will be invalidated by
+the update.
 + Request (application/json)
     + Header
     
@@ -456,6 +379,7 @@ A drop is primary a text and image package that can be encrypted and placed at a
             }
 
 ### Delete a Drop [DELETE]
+The creator of a Drop can remove it again.
 + Request
     + Header
     
@@ -463,48 +387,150 @@ A drop is primary a text and image package that can be encrypted and placed at a
 
 + Response 204
 
-## Drop Trends [/drops/{id}/trends]
-Other users response to the drop
+## Drops [/drops]
+Use this endpoint to add new Drops.
 
-### Give upvote/downvote on a Drop [POST]
-+ Request Upvote (application/json)
+### Create a Drop [POST]
+A used does not have to be at a specific location when creating a Drop, but
+can place the drop anywhere in the world.
+
+TODO: Describe why this is a really strong use case.
+
++ Request Tail (application/json)
     + Header
     
-            X-Social-API-Session-Token: 285A2911-C42E-4650-8D44-2356B11AD806   
+            X-Social-API-Session-Token: 285A2911-C42E-4650-8D44-2356B11AD806
 
     + Body
     
             {
-                "vote": "up"
+                "location": "u4pruydqqvj",
+                "pickupZone": 10,
+                "horizon": 7,
+                "lifespan": 5,
+                "beat": 3,
+                "destruct": 0,
+                "signature": "HYybwVYYJaDoMJc6wG1a8rIASpU1mWEP/lRvgPZkyQORSgisQ==",
+                "alias": "sejersbol",
+                "text": "Finders keepers",
+                "photo": "VGhpcyBpcyBhIG5pY2UgaW1hZ2UgZHVtbXk="
             }
 
 + Response 201 (application/json)
-    + Body
-
-            {
-                "voteCount": 42
-            }
-
-+ Request Downvote (application/json)
     + Header
     
-            X-Social-API-Session-Token: 285A2911-C42E-4650-8D44-2356B11AD806   
+            Location: https://api.social.tla/1/drops/77AD2C7C-D23F-401A-AEA3-DFAB7629E6A3
 
     + Body
     
             {
-                "vote": "down"
+                "createdAt": "2015-05-24T18:30:19.124Z",
+                "id": "77AD2C7C-D23F-401A-AEA3-DFAB7629E6A3"
+            }
+
++ Request Buddy (application/json)
+    + Header
+    
+            X-Social-API-Session-Token: 285A2911-C42E-4650-8D44-2356B11AD806
+
+    + Body
+    
+            {
+                "location": "u4pruydqqvj",
+                "pickupZone": 10,
+                "horizon": 7,
+                "lifespan": 5,
+                "beat": 3,
+                "destruct": 0,
+                "encrypted": "YYYbwVYYJaDoMJc6wG1a8rIASpU1mWEP/lRvgPZkyQORSgHej==",
             }
 
 + Response 201 (application/json)
+    + Header
+    
+            Location: https://api.social.tla/1/drops/AA3AE4F2-B681-4AA8-946F-E7D9419A87F2
+
+    + Body
+    
+            {
+                "createdAt": "2015-05-24T18:30:19.124Z",
+                "id": "AA3AE4F2-B681-4AA8-946F-E7D9419A87F2"
+            }
+
+### Search for nearby Drops [GET]
+Given the user location all drops that are within the drop horizon from the
+user will be detectable.
++ Request (application/json)
+    + Header 
+
+            X-Social-API-Session-Token: 285A2911-C42E-4650-8D44-2356B11AD806
+
     + Body
 
             {
-                "voteCount": -10
+                "userLocation": "u4pruydgqka"
             }
 
-### Trending Drops [GET]
-Many and quickly increasing upvotes within a specified region.
++ Response 200 (application/json)
+    + Body
+    
+            [
+                {
+                    "dropId": "77AD2C7C-D23F-401A-AEA3-DFAB7629E6A3",
+                    "location": "u4pruydqqvj"
+                }, {
+                    "dropId": "75774800-ADFF-41FE-91AD-EE7D42164A02",
+                    "location": "u4pruydqqvk"
+                }, {
+                    "dropId": "E16FFFDF-1D08-48B8-A50F-8510B1E91AA7",
+                    "location": "u4pruydqqvg"
+                }
+            ]
+
+## Drop Kudos [/drops/{id}/kudos]
+Use this endpoint to add or remove Kudos for a Drops. If a drop reaches a
+significant negative amount of kudos it will be deleted and the creator of the
+drop will be warned that several offensive drops will lead to a ban from the
+social network.
+
+### Give Kudos to a Drop [PUT]
+The user should call this if he/she likes the Drop.
++ Request
+    + Header
+    
+            X-Social-API-Session-Token: 285A2911-C42E-4650-8D44-2356B11AD806
+
++ Response 204
+
+### Give negative Kudos to a Drop [DELETE]
+The user should call this if he/she likes the Drop.
++ Request
+    + Header
+    
+            X-Social-API-Session-Token: 285A2911-C42E-4650-8D44-2356B11AD806
+
++ Response 204
+
+### Retrieve Kudos of a Drop [GET]
+The returned number is a count of the number of given Kudos minus the number of
+removed Kudos.
++ Request
+    + Header
+    
+            X-Social-API-Session-Token: 285A2911-C42E-4650-8D44-2356B11AD806
+
++ Response 200
+    + Body
+
+            {
+                "kudos": 42
+            }
+    
+## Drops Trending [/drops/trending]
+This endpoint return trending Drops within a region.
+
+### Retrieve the trending Drops [GET]
+Return Drops with highest Kudos, but do not specify the exact location.
 
 + Request (application/json)
     + Body
@@ -519,10 +545,42 @@ Many and quickly increasing upvotes within a specified region.
             [
                 {
                     "dropId": "75774800-ADFF-41FE-91AD-EE7D42164A02",
-                    "location": "u4pruydqqvk"
+                    "location": "u4pruydab"
                 }, {
                     "dropId": "E16FFFDF-1D08-48B8-A50F-8510B1E91AA7",
-                    "location": "u4pruydqqvg"
+                    "location": "u4pruydcc"
+                }
+            ]
+
+## Drops Statistics [/drops/statistics]
+This endpoint return statistics about Drops within a region.
+
+The Drop Statisctics resource has the following attributes:
+
+- location
+- count
+
+TODO: Describe statistics!
+
+### Return statistics about Drops [GET]
+Given a region, return the Drops statistics for that region.
++ Request (application/json)
+    + Body
+    
+            {
+                "region": "u4pruyd"
+            }
+
++ Response 200 (application/json)
+    + Body
+
+            [
+                {
+                    "location": "u4pruydab",
+                    "count": 123
+                }, {
+                    "location": "u4pruydcc",
+                    "count": 42
                 }
             ]
 
