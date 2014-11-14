@@ -86,11 +86,14 @@ Users can only delete their own user (checked by adding the session token in the
 Use this endpoint to add new users of the API.
 
 ### Create a User [POST]
-The user sends his/her alias and 
-+ Request
-    + Headers
+The user sends his/her public key and alias 
++ Request (application/json)
+    + Body
 
-            Authorization: Basic c2VqZXJzYm9sOnFhenhzdw==
+           {
+                "alias": "sejersbol",
+                "key": "QKy1AIAaAQH8Zc4AEEQVf0AAAACYkLk=="
+            }
 
 + Response 201 (application/json)
     + Header
