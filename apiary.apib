@@ -13,40 +13,39 @@ Where applicable this API uses the [JSON](http://en.wikipedia.org/wiki/JSON) med
 ## Error States
 The common [HTTP Response Status Codes](https://github.com/for-GET/know-your-http-well/blob/master/status-codes.md) are used.
 
-# Social API Root [/]
-Social API entry point.
-
-This resource does not have any attributes.
-
 # Group Users
 User related resources of the **Social API**
 
-## User [/users]
+## User [/users/{id}]
+A User object. The User resource reprecents a person that is using the Social API, i.e. the perons aliases.
 
-### Create a User [POST]
-+ Request (application/json)
-    + Body
-    
-            {
-                "alias": "sejersbol",
-                "password": "xswedc"
-            }
+The internal data structure will also hold the users public key, but this will not be available over the API.
 
-+ Response 201 (application/json)
+The User resource has the following attributes:
+
+- id
+- createdAt
+- updatedAt
+- aliases
+
+The states *id*, *createdAt*, and *updatedAt* are assigned by the Social API. 
+
++ Parameters
+    + id (string) ... ID of the User in the form of a [UUID](http://en.wikipedia.org/wiki/Universally_unique_identifier).
+
++ Model (application/json)
+JSON representation of Gist Resource.
+
     + Header
-    
-            Location: https://api.social.tla/1/users/0BBAC7F3-4B87-4A20-A5F5-05A8C7FE73CF
 
     + Body
 
             {
-                "userId": "0BBAC7F3-4B87-4A20-A5F5-05A8C7FE73CF",
-                "createdAt": "2015-04-23T18:25:43.511Z"
-                "sessionToken": "285A2911-C42E-4650-8D44-2356B11AD806"
+                "id": "0BBAC7F3-4B87-4A20-A5F5-05A8C7FE73CF",
+                "createdAt": "2015-04-23T18:25:43.511Z",
+                "updatedAt": "2015-04-23T18:25:43.511Z",
+                "aliases": [{"alias": "sejersbol"}, {"alias": "coolbuddy"}]
             }
-
-## Operations on a User [/users/{id}]
-A user with all his/her properties.
 
 ### Retrieve a User [GET]
 Users can only retrieve their own user (checked by adding the session token in the header).
@@ -57,14 +56,7 @@ Users can only retrieve their own user (checked by adding the session token in t
             X-Social-API-Session-Token: 285A2911-C42E-4650-8D44-2356B11AD806
 
 + Response 200 (application/json)
-    + Body
-
-            {
-                "alias": "sejersbol",
-                "createdAt": "2015-04-23T18:25:43.511Z",
-                "updatedAt": "2015-04-23T18:25:43.511Z",
-                "userId": "0BBAC7F3-4B87-4A20-A5F5-05A8C7FE73CF"
-            }
+    [User][]
 
 ### Update a User [PUT]
 Users can only update their own user (checked by adding the session token in the header).
@@ -196,6 +188,30 @@ The user wallet is where the user keeps his/her in-app coins.
             X-Social-API-Session-Token: 285A2911-C42E-4650-8D44-2356B11AD806
 
 + Response 204
+
+## User [/users]
+
+### Create a User [POST]
++ Request (application/json)
+    + Body
+    
+            {
+                "alias": "sejersbol",
+                "password": "xswedc"
+            }
+
++ Response 201 (application/json)
+    + Header
+    
+            Location: https://api.social.tla/1/users/0BBAC7F3-4B87-4A20-A5F5-05A8C7FE73CF
+
+    + Body
+
+            {
+                "userId": "0BBAC7F3-4B87-4A20-A5F5-05A8C7FE73CF",
+                "createdAt": "2015-04-23T18:25:43.511Z"
+                "sessionToken": "285A2911-C42E-4650-8D44-2356B11AD806"
+            }
 
 # Group Signin
 
