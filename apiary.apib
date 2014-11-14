@@ -109,9 +109,7 @@ The alias is just for convenience, and a user can potentially have many aliases.
 
             {
                 "userId": "0BBAC7F3-4B87-4A20-A5F5-05A8C7FE73CF",
-                "createdAt": "2015-04-23T18:25:43.511Z",
-                "updatedAt": "2015-04-23T18:25:43.511Z",
-                "aliases": [{"alias": "sejersbol"}]
+                "createdAt": "2015-04-23T18:25:43.511Z"
             }
 
 ## User Wallet [/users/{id}/wallet]
@@ -160,20 +158,19 @@ The Wallet resource has the following attribute:
 ## User Buddy [/users/{id}/buddies/{alias}]
 A User Buddy object. The User Buddy resource reprecents a persons buddies.
 
-(TODO - Remove this note: The internal data structure will also hold the users public key,
-but this will not be available over the API.)
+The User Buddy resource has the following attributes:
 
-The User resource has the following attributes:
-
-- id
 - createdAt
 - updatedAt
 - aliases
+- key
+- ignore
 
-The states *id*, *createdAt*, and *updatedAt* are assigned by the Social API. 
+The states *createdAt*, and *updatedAt* are assigned by the Social API. 
 
 + Parameters
     + id (string) ... ID of the User in the form of a [UUID](http://en.wikipedia.org/wiki/Universally_unique_identifier).
+    + alias (string) ... One of the aliases the user is known under.
 
 ### Retrieve a User Buddies [GET]
 + Request
@@ -185,7 +182,11 @@ The states *id*, *createdAt*, and *updatedAt* are assigned by the Social API.
     + Body
     
             {
-                "buddyKey": "QKy1AIAaAQH8Zc4AEEQVf0AAAACYkLk=="
+                "createdAt": "2015-04-23T18:25:43.511Z",
+                "updatedAt": "2015-04-23T18:25:43.511Z",
+                "aliases": [{"alias": "sejersbol"}],
+                "key": "QKy1AIAaAQH8Zc4AEEQVf0AAAACYkLk==",
+                "ignore": false
             }
 
 ### Delete a User Buddy [DELETE]
@@ -210,7 +211,7 @@ When the user picks up a key from another user (we call this for a *buddy key*) 
     
             {
                 "alias": "sejersbol",
-                "buddyKey": "QKy1AIAaAQH8Zc4AEEQVf0AAAACYkLk=="
+                "key": "QKy1AIAaAQH8Zc4AEEQVf0AAAACYkLk=="
             }
 
 + Response 201 (application/json)
@@ -220,7 +221,7 @@ When the user picks up a key from another user (we call this for a *buddy key*) 
                 "createdAt": "2015-04-23T18:25:43.511Z"
             }
 
-+ Request Ignore (application/json)
++ Request - ignore a User Buddy (application/json)
     + Header
     
             X-Social-API-Session-Token: 285A2911-C42E-4650-8D44-2356B11AD806
