@@ -292,7 +292,7 @@ The Drop resource has the following attributes:
 The states *id*, *createdAt*, and *updatedAt* are assigned by the Social API. 
 
 + Parameters
-    + id (string) ... ID of the User in the form of a [UUID](http://en.wikipedia.org/wiki/Universally_unique_identifier).
+    + id (string) ... ID of the Drop in the form of a [UUID](http://en.wikipedia.org/wiki/Universally_unique_identifier).
 
 ### Retrieve a Drop [GET]
 A Drop can only be retrieved if the user is inside the pickup zone, thus the
@@ -604,6 +604,9 @@ The Message resource has the following attributes:
 
 The states *id*, *sentAt* are assigned by the Social API.
 
++ Parameters
+    + id (string) ... ID of the Message in the form of a [UUID](http://en.wikipedia.org/wiki/Universally_unique_identifier).
+
 ### Retrieve a Message [GET]
 A Message is sent directly to the recipient(s). If it is a *tail message* the
 key of the recipient must be included in the message (otherwise the receiver
@@ -638,19 +641,29 @@ can not be found).
                 "image": "VGhpcyBpcyBhIG5pY2UgaW1hZ2UgZHVtbXk="
             }
 
-### Delete a Message [DELETE]
-+ Request
+### Cancel a Message [DELETE]
+This will cancel the message from the server. If the message has not been
+delivered it will be deleted
++ Request Success
     + Header
     
             X-Social-API-Session-Token: 285A2911-C42E-4650-8D44-2356B11AD806
 
 + Response 204
 
-## Messages [/messages]
-Send messages direct to other users.
++ Request Failed
+    + Header
+    
+            X-Social-API-Session-Token: 285A2911-C42E-4650-8D44-2356B11AD806
 
-### Create Message [POST]
-+ Request Buddy - single recipient, encrypted (application/json)
++ Response 410
+
+## Messages [/messages]
+Use this endpoint to send Messages direct to other users.
+
+### Send Message [POST]
+Send the message.
++ Request Buddy (application/json)
     + Header
     
             X-Social-API-Session-Token: 285A2911-C42E-4650-8D44-2356B11AD806
@@ -658,7 +671,7 @@ Send messages direct to other users.
     + Body
     
             {
-                "buddyKey": "QKy1AIAaAQH8Zc4AEEQVf0AAAACYkLk==",
+                "key": "QKy1AIAaAQH8Zc4AEEQVf0AAAACYkLk==",
                 "encrypted": "VGhpcyBpcyBhIHZlcnkgc2VjcmV0IHRlc3Q="
             }
 
@@ -671,10 +684,10 @@ Send messages direct to other users.
     
             {
                 "sentAt": "2015-05-27T10:45:20.584Z",
-                "messageId": "B2F99855-D323-4C91-9528-E3AA113B1855"
+                "id": "B2F99855-D323-4C91-9528-E3AA113B1855"
             }
 
-+ Request Tail - for all who have discovered the senders key, not encrypted (application/json)
++ Request Tail (application/json)
     + Header
     
             X-Social-API-Session-Token: 285A2911-C42E-4650-8D44-2356B11AD806
@@ -682,10 +695,10 @@ Send messages direct to other users.
     + Body
     
             {
+                "signature": "PDybwVYYJaDoMJc6wG1a8rIASpU1mWEP/lRvgPZkyQORSgiKl==",
                 "alias": "sejersbol",
                 "text": "This is not encrypted",
-                "image": "VGhpcyBpcyBhIG5pY2UgaW1hZ2UgZHVtbXk=",
-                "signature": "PDybwVYYJaDoMJc6wG1a8rIASpU1mWEP/lRvgPZkyQORSgiKl=="
+                "image": "VGhpcyBpcyBhIG5pY2UgaW1hZ2UgZHVtbXk="
             }
 
 + Response 201 (application/json)
@@ -697,10 +710,12 @@ Send messages direct to other users.
     
             {
                 "sentAt": "2015-05-27T10:45:20.584Z",
-                "messageId": "812B17BF-F9F3-41BC-A248-E3C9C5E52A0F"
+                "id": "812B17BF-F9F3-41BC-A248-E3C9C5E52A0F"
             }
 
 ### Retrieve Messages [GET]
+This can be called to look for Messages for users with the specified session
+token.
 + Request
     + Header
     
