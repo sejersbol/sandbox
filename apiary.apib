@@ -15,9 +15,6 @@ User related resources of the **Social API**
 ## User [/users/{id}]
 A User object. The User resource represents a person that is using the Social API, i.e. the perons aliases.
 
-(TODO - Remove this note: The internal data structure will also hold the users public key,
-but this will not be available over the API.)
-
 The User resource has the following attributes:
 
 - id
@@ -587,6 +584,64 @@ Given a region, return the Drops statistics for that region.
 # Group Messages
 Message related resources of the **Social API**.
 
+## Message [/messages/{id}]
+A Message object. The Message resource can contain a **text** and a **photo**
+and can be send directly between users of the Social API, i.e. it is not
+location based.
+
+TODO: Describe/define *buddy messages* and *tail message*!
+
+The Message resource has the following attributes:
+
+* id
+* sentAt
+* signature
+* key
+* alias
+* text
+* photo
+* encrypted
+
+The states *id*, *sentAt* are assigned by the Social API.
+
+### Retrieve a Message [GET]
++ Request Buddy - single recipient, encrypted
+    + Header
+    
+            X-Social-API-Session-Token: 285A2911-C42E-4650-8D44-2356B11AD806
+
++ Response 200 (application/json)
+    + Body
+    
+            {
+                "sentAt": "2015-05-27T10:45:20.584Z",
+                "encrypted": "VGhpcyBpcyBhIHZlcnkgc2VjcmV0IHRlc3Q="
+            }
+
++ Request Tail - can be read by other users, verified by user who have the senders key
+    + Header
+    
+            X-Social-API-Session-Token: 285A2911-C42E-4650-8D44-2356B11AD806
+
++ Response 200 (application/json)
+    + Body
+    
+            {
+                "sentAt": "2015-05-27T10:45:20.584Z",
+                "alias": "sejersbol",
+                "text": "This is not encrypted",
+                "image": "VGhpcyBpcyBhIG5pY2UgaW1hZ2UgZHVtbXk=",
+                "signature": "PDybwVYYJaDoMJc6wG1a8rIASpU1mWEP/lRvgPZkyQORSgiKl=="
+            }
+
+### Delete a Message [DELETE]
++ Request
+    + Header
+    
+            X-Social-API-Session-Token: 285A2911-C42E-4650-8D44-2356B11AD806
+
++ Response 204
+
 ## Messages [/messages]
 Send messages direct to other users.
 
@@ -664,46 +719,6 @@ Send messages direct to other users.
                     "messageId": "812B17BF-F9F3-41BC-A248-E3C9C5E52A0F"
                 }
             ]
-
-## Operations on Messages [/messages/{messageId}]
-
-### Retrieve a Message [GET]
-+ Request Buddy - single recipient, encrypted
-    + Header
-    
-            X-Social-API-Session-Token: 285A2911-C42E-4650-8D44-2356B11AD806
-
-+ Response 200 (application/json)
-    + Body
-    
-            {
-                "sentAt": "2015-05-27T10:45:20.584Z",
-                "encrypted": "VGhpcyBpcyBhIHZlcnkgc2VjcmV0IHRlc3Q="
-            }
-
-+ Request Tail - can be read by other users, verified by user who have the senders key
-    + Header
-    
-            X-Social-API-Session-Token: 285A2911-C42E-4650-8D44-2356B11AD806
-
-+ Response 200 (application/json)
-    + Body
-    
-            {
-                "sentAt": "2015-05-27T10:45:20.584Z",
-                "alias": "sejersbol",
-                "text": "This is not encrypted",
-                "image": "VGhpcyBpcyBhIG5pY2UgaW1hZ2UgZHVtbXk=",
-                "signature": "PDybwVYYJaDoMJc6wG1a8rIASpU1mWEP/lRvgPZkyQORSgiKl=="
-            }
-
-### Delete a Message [DELETE]
-+ Request
-    + Header
-    
-            X-Social-API-Session-Token: 285A2911-C42E-4650-8D44-2356B11AD806
-
-+ Response 204
 
 ## Message Feedback [/messages/{id}/feedback]
 Other users response to the message
