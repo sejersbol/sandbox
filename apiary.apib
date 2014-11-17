@@ -490,6 +490,15 @@ significant negative amount of kudos it will be deleted and the creator of the
 drop will be warned that several offensive drops will lead to a ban from the
 social network.
 
+The Drop Kodos resource has the following attribute:
+
+- kudos
+
+TODO
+
++ Parameters
+    + id (string) ... ID of the Drop in the form of a [UUID](http://en.wikipedia.org/wiki/Universally_unique_identifier).
+
 ### Give Kudos to a Drop [PUT]
 The user should call this if he/she likes the Drop.
 + Request
@@ -662,7 +671,7 @@ delivered it will be deleted
 Use this endpoint to send Messages direct to other users.
 
 ### Send Message [POST]
-Send the message.
+Send a message.
 + Request Buddy (application/json)
     + Header
     
@@ -739,42 +748,40 @@ token.
                 }
             ]
 
-## Message Feedback [/messages/{id}/feedback]
-Other users response to the message
+## Message Votes [/messages/{id}/votes]
+Other users response to the Message. The vote works the same way as the kudos
+for drops.
 
-### Give Feedback on a Message [POST]
-+ Request Upvote (application/json)
+- vote
+
+TODO
+
++ Parameters
+    + id (string) ... ID of the Message in the form of a [UUID](http://en.wikipedia.org/wiki/Universally_unique_identifier).
+
+### Vote on a Message [PUT]
++ Request Upvote
     + Header
     
             X-Social-API-Session-Token: 285A2911-C42E-4650-8D44-2356B11AD806   
 
-    + Body
-    
-            {
-                "vote": "up"
-            }
++ Response 204
 
-+ Response 201 (application/json)
-    + Body
-
-            {
-                "voteCount": 42
-            }
-
-+ Request Downvote (application/json)
+### Downvote a Message [DELETE]
+This will remove a Vote for the message.
++ Request Downvote
     + Header
     
             X-Social-API-Session-Token: 285A2911-C42E-4650-8D44-2356B11AD806   
 
-    + Body
++ Response 204
+
+### Retrieve Votes for a Message [GET]
+The returned number is a count of the number of given Votes minus the number of
+downvotes for the Message
++ Request
+    + Header
     
-            {
-                "vote": "down"
-            }
+            X-Social-API-Session-Token: 285A2911-C42E-4650-8D44-2356B11AD806   
 
-+ Response 201 (application/json)
-    + Body
-
-            {
-                "voteCount": -10
-            }
++ Response 204
