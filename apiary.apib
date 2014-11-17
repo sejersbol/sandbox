@@ -10,7 +10,7 @@ Where applicable this API uses the [JSON](http://en.wikipedia.org/wiki/JSON) med
 The common [HTTP Response Status Codes](https://github.com/for-GET/know-your-http-well/blob/master/status-codes.md) are used.
 
 # Group Users
-User related resources of the **Social API**
+User related resources of the **Social API**.
 
 ## User [/users/{id}]
 A User object. The User resource represents a person that is using the Social API, i.e. the perons aliases.
@@ -785,3 +785,32 @@ downvotes for the Message
             X-Social-API-Session-Token: 285A2911-C42E-4650-8D44-2356B11AD806   
 
 + Response 204
+
+# Group iOS
+iOS related resources of the **Social API**.
+
+## iOS [/ios]
+Use this endpoint to send iOS client installation information to the
+**Social API** server.
+
+- deviceToken
+- language
+
+TODO
+
+### Upload installation information [PUT]
+This will send the iOS client installation information to the **Social API**
+server.
++ Request (application/json)
+    + Header
+    
+            X-Social-API-Session-Token: 285A2911-C42E-4650-8D44-2356B11AD806
+
+    + Body
+    
+            {
+                "deviceToken": "8BCAA00F-C2BE-4951-BFF8-DDA90DADA680",
+                "language": "en"
+            }
+
++ Response 200
